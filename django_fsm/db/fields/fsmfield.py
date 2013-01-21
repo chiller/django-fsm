@@ -136,7 +136,7 @@ def transition(field=None, source='*', target=None, save=False, conditions=[]):
                     name = func.__name__,
                     source = source_state,
                     target = meta.next_state(instance))
- 	
+    
                 result = func(instance, *args, **kwargs)
 
                 meta.to_next_state(instance)
@@ -193,6 +193,25 @@ def get_available_FIELD_transitions(instance, field):
                 result.append((meta.transitions['*'], transition))
     return result
 
+def get_all_FIELD_transitions(instance, field):
+    """
+    author: chiller
+    This returns all transitions from current state, unlike get_available_FIELD_transitions
+    where only the ones that pass condition validations are displayed
+    """
+    curr_state = getattr(instance, field.name)
+    result = []
+    for transition in field.transitions:
+        meta = transition._django_fsm
+        if meta.has_transition(instance):
+            try:
+                result.append((meta.transitions[curr_state], transition))
+            except KeyError:
+                result.append((meta.transitions['*'], transition))
+    return result
+
+
+
 
 class FSMFieldDescriptor(object):
     def __init__(self, field):
@@ -227,6 +246,7 @@ class FSMField(models.Field):
         setattr(cls, self.name, self.descriptor_class(self))
         if self.transitions:
             setattr(cls, 'get_available_%s_transitions' % self.name, curry(get_available_FIELD_transitions, field=self))
+            setattr(cls, 'get_all_%s_transitions' % self.name, curry(get_all_FIELD_transitions, field=self))
 
     def get_internal_type(self):
         return 'CharField'

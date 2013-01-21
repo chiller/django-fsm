@@ -126,6 +126,12 @@ You could specify FSMField explicitly in transition decorator.
 This allows django_fsm to contribute to model class get_available_FIELD_transitions method,
 that returns list of (target_state, method) available from current model state
 
+
+### get_all_FIELD_transitions
+
+This allows django_fsm to contribute to model class get_all_FIELD_transitions method,
+that returns list of (target_state, method) available from current model state bypassing condition validation
+
 ### Foreign Key constraints support 
 
 If you store the states in the db table you could use FSMKeyField to
