@@ -76,6 +76,8 @@ functions return `True`, all conditions are considered to be met and transition
 is allowed to happen. If one of the functions return `False`, the transition
 will not happen. These functions should not have any side effects.
 
+NOTE: In chiller's fork it has to explicitly evaluate to True. 
+
 You can use ordinary functions
 
     def can_publish(instance):

@@ -92,7 +92,7 @@ class FSMMeta(object):
         if state not in self.conditions:
            state = '*'
  
-        if all(map(lambda f: f(instance), self.conditions[state])):
+        if all(map(lambda f: f(instance)==True, self.conditions[state])):
                 return True
         return False
 
